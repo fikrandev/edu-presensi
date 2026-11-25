@@ -29,8 +29,8 @@ $faviconUrl = Tenant::brandingAssetUrl($saas['favicon_path'] ?? '', 'assets/img/
 $schoolSlug = $school['slug'];
 $baseCardsUrl = Tenant::schoolLocalUrl($schoolSlug, 'admin/student-cards');
 ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <body class="bg-[#F7F9FC] text-slate-800 min-h-screen p-4 sm:p-6 antialiased">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <!-- Top Action Toolbar -->
   <div class="w-full mb-6 bg-white rounded-2xl p-4 sm:p-5 shadow-[0_2px_12px_rgba(15,23,42,0.04)] border border-slate-200/80 flex flex-wrap items-center justify-between gap-4">
     <div class="flex items-center gap-3">

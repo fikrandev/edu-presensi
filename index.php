@@ -242,8 +242,9 @@ if ($seg1 === 'admin') {
 
     if ($page === 'student-cards') {
         Tenant::requireFeature($school, 'student_management', false);
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
         Response::render('school_admin/student_cards', [
-            'pageTitle'   => 'Cetak Kartu QR Siswa',
+            'pageTitle'   => 'Download Kartu QR Siswa (PNG)',
             'school'      => $school,
             'currentUser' => $user,
             'loadQrCode'  => true,
