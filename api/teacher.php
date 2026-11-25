@@ -167,12 +167,15 @@ if ($action === 'scan-qr') {
         Response::json(['success' => false, 'message' => 'Sesi absen ini sudah ditutup. Buka kembali untuk melakukan scan.'], 422);
     }
 
-    // Find student by qr_token or NISN inside THIS school
-    $stStmt = $pdo->prepare("SELECT * FROM students WHERE school_id = ? AND (qr_token = ? OR nisn = ?) AND is_active = 1 LIMIT 1");
+    // Clean scanned string (trim spaces/newlines from QR or USB barcode scanner)
+    $code = trim(preg_replace('/\s+/', '', $code) ?? '');
+
+    // Find student by qr_token (case-insensitive) or NISN inside THIS school
+    $stStmt = $pdo->prepare("SELECT * FROM students WHERE school_id = ? AND (UPPER(qr_token) = UPPER(?) OR nisn = ?) AND is_active = 1 LIMIT 1");
     $stStmt->execute([$schoolId, $code, $code]);
     $student = $stStmt->fetch();
     if (!$student) {
-        Response::json(['success' => false, 'message' => 'Kartu QR tidak dikenali di sekolah ini.'], 404);
+        Response::json(['success' => false, 'message' => "Kartu QR ({$code}) tidak dikenali di sekolah ini."], 404);
     }
 
     // Check record in session
@@ -181,6 +184,23 @@ if ($action === 'scan-qr') {
     $rec = $recStmt->fetch();
 
     if (!$rec) {
+        // If student belongs to this session's class (e.g. newly added after session creation), auto-add & mark present!
+        if (strcasecmp(trim((string)$student['class_name']), trim((string)$session['class_name'])) === 0) {
+            $now = date('Y-m-d H:i:s');
+            $pdo->prepare("
+                INSERT INTO student_attendance_records (school_id, session_id, student_id, status, scanned_at, scan_method)
+                VALUES (?, ?, ?, 'hadir', ?, 'qr')
+            ")->execute([$schoolId, $sessionId, $student['id'], $now]);
+
+            Response::json([
+                'success'         => true,
+                'already_scanned' => false,
+                'message'         => "HADIR! {$student['name']} ({$student['nisn']}) berhasil discan.",
+                'student'         => $student,
+                'scanned_at'      => date('H:i:s', strtotime($now)),
+            ]);
+        }
+
         Response::json([
             'success' => false,
             'message' => "Siswa {$student['name']} berasal dari kelas {$student['class_name']}, bukan kelas {$session['class_name']}.",
