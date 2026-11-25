@@ -1,0 +1,75 @@
+:root {
+  --brand-primary: #1d4ed8;
+  --brand-primary-dark: #1e3a8a;
+  --brand-accent: #2563eb;
+  --brand-soft: #eff6ff;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth modal animations */
+@keyframes modalPop {
+  0% { opacity: 0; transform: scale(0.92) translateY(8px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-pop {
+  animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes checkBounce {
+  0% { transform: scale(0.4); opacity: 0; }
+  65% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.icon-bounce {
+  animation: checkBounce 0.38s ease-out forwards;
+}
+
+/* Custom blue scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
+/* Mobile bottom nav safe area */
+.mobile-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: 0 -6px 24px -4px rgba(15, 23, 42, 0.12);
+}
+
+/* Matrix table sticky first column */
+.matrix-table th:first-child,
+.matrix-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: #ffffff;
+  box-shadow: 2px 0 6px -2px rgba(15, 23, 42, 0.08);
+}
+
+.matrix-table thead th:first-child {
+  background: #eff6ff;
+  z-index: 20;
+}
+
+/* Print styles for QR Student Cards */
+@media print {
+  body { background: #ffffff !important; }
+  .no-print { display: none !important; }
+  .print-card-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  .student-qr-card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    box-shadow: none !important;
+    border: 1.5px solid #1d4ed8 !important;
+  }
+}

@@ -1,0 +1,13 @@
+# Uploaded user media (branding, attendance selfies, corrections, avatars)
+uploads/*
+!uploads/.gitkeep
+
+# Local environment & logs
+.env
+*.log
+.DS_Store
+Thumbs.db
+
+# IDE folders
+.vscode/
+.idea/
