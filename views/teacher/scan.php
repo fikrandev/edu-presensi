@@ -184,16 +184,16 @@ function loadSessionDetail() {
 
     let html = '';
     recs.forEach(r => {
-      const btn = (st, label, activeCls) => `<button type="button" onclick="setManualStatus(${r.record_id},'${st}')" class="px-2 py-1 rounded-lg text-[11px] font-bold transition ${r.status===st ? activeCls : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}">${label}</button>`;
+      const badge = (st, label, activeCls) => `<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg text-[11px] font-bold select-none ${r.status===st ? activeCls : 'bg-slate-100 text-slate-300'}">${label}</span>`;
       html += `<tr class="hover:bg-slate-50/70">
         <td class="px-4 py-3"><div class="font-bold text-slate-800">${ApiClient.e(r.name)}</div><div class="text-[10px] font-mono text-slate-400">NISN: ${ApiClient.e(r.nisn)}</div></td>
         <td class="px-3 py-3 text-center font-mono text-slate-600">${r.scanned_at ? r.scanned_at.substring(11,19) : '-'} ${r.scan_method==='qr'?'<i class="fa-solid fa-qrcode text-[#1E5BF0] ml-1"></i>':''}</td>
         <td class="px-4 py-3 text-right">
           <div class="inline-flex gap-1">
-            ${btn('hadir','H','bg-emerald-600 text-white')}
-            ${btn('sakit','S','bg-purple-600 text-white')}
-            ${btn('izin','I','bg-sky-600 text-white')}
-            ${btn('alpha','A','bg-rose-600 text-white')}
+            ${badge('hadir','H','bg-emerald-600 text-white shadow-sm')}
+            ${badge('sakit','S','bg-purple-600 text-white shadow-sm')}
+            ${badge('izin','I','bg-sky-600 text-white shadow-sm')}
+            ${badge('alpha','A','bg-rose-600 text-white shadow-sm')}
           </div>
         </td>
       </tr>`;
