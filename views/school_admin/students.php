@@ -13,7 +13,7 @@
     </div>
     <div class="flex flex-wrap gap-2">
       <button type="button" onclick="openPrintCards()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shadow transition">
-        <i class="fa-solid fa-id-card mr-1"></i> Generate & Cetak Kartu QR
+        <i class="fa-solid fa-id-card mr-1"></i> Generate &amp; Download Kartu QR (PNG)
       </button>
       <?php if (Tenant::hasFeature($school, 'excel_import')): ?>
       <button type="button" onclick="openImportStuModal()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow transition">
@@ -107,7 +107,7 @@
       <div id="qrTokenLabel" class="font-mono text-xs font-bold text-blue-700 mt-3"></div>
       <div class="mt-5 flex gap-2">
         <button type="button" onclick="$('#qrPreviewModal').addClass('hidden').removeClass('flex')" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Tutup</button>
-        <a id="qrSinglePrintLink" href="#" target="_blank" class="flex-1 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold">Cetak Kartu</a>
+        <a id="qrSinglePrintLink" href="#" target="_blank" class="flex-1 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold">Download Kartu PNG</a>
       </div>
     </div>
   </div>
