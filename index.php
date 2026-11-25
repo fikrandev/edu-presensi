@@ -12,11 +12,14 @@ require_once __DIR__ . '/core/XlsxHelper.php';
 
 Security::startSession();
 
-// Parse clean request path relative to app base path
-$reqUri   = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+// Parse clean request path relative to auto-detected app base path
+$reqUri   = rawurldecode(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
 $basePath = app_base_path();
-if ($basePath !== '' && str_starts_with($reqUri, $basePath)) {
+if ($basePath !== '' && (str_starts_with($reqUri, $basePath) || (DIRECTORY_SEPARATOR === '\\' && stripos($reqUri, $basePath) === 0))) {
     $reqUri = substr($reqUri, strlen($basePath));
+}
+if (str_starts_with($reqUri, '/index.php')) {
+    $reqUri = substr($reqUri, 10);
 }
 $route = trim($reqUri, '/');
 $segments = $route === '' ? [] : explode('/', $route);

@@ -1,6 +1,10 @@
 Options -Indexes
 RewriteEngine On
 
+# Pass Authorization header on cPanel / PHP-FPM / CGI
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 # Security Headers
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
@@ -8,14 +12,21 @@ RewriteEngine On
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
 
-# Block direct access to sensitive folders and files
+# Block direct access to sensitive folders, dotfiles, and raw files
+RewriteRule ^\.git - [F,L]
 RewriteRule ^(config|core|database|views)/ - [F,L]
-RewriteRule \.(sql|md|env|log)$ - [F,L]
+RewriteRule \.(sql|md|env|example|log)$ - [F,L]
+
+<FilesMatch "^\.(env|git|htaccess)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
 
 # Allow existing files and directories (assets, uploads, install.php, etc.)
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Route all other requests to front controller
+# Route all other requests to front controller (relative, works on root & any subfolder)
 RewriteRule ^ index.php [QSA,L]
