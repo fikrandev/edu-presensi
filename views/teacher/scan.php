@@ -332,14 +332,6 @@ function switchCamera() {
   startFullScanner();
 }
 
-function setManualStatus(recordId, status) {
-  ApiClient.post('<?= app_url('/api/teacher/record-status') ?>', {
-    school_slug: SLUG,
-    record_id: recordId,
-    status: status
-  }, { loading: false }).then(() => loadSessionDetail()).catch(() => {});
-}
-
 $('#manualScanForm').on('submit', function (e) {
   e.preventDefault();
   const code = $('#manualQrCode').val().trim();
