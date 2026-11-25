@@ -32,7 +32,7 @@ if ($action === 'superadmin-login') {
 
     Response::json([
         'success'  => true,
-        'message'  => 'Login Superadmin berhasil (sesi aktif selama 3 jam).',
+        'message'  => 'Login Superadmin berhasil.',
         'redirect' => app_url('/superadmin/dashboard'),
     ]);
 }
@@ -89,10 +89,9 @@ if ($action === 'school-login') {
         'employee'     => Tenant::schoolLocalUrl($school['slug'], 'pegawai/dashboard'),
     ];
 
-    $sessionNote = $persistForever ? ' (Sesi Mobile PWA aktif selamanya).' : ' (Sesi Web Admin aktif selama 3 jam).';
     Response::json([
         'success'  => true,
-        'message'  => 'Login berhasil. Selamat datang, ' . $user['name'] . '!' . $sessionNote,
+        'message'  => 'Login berhasil. Selamat datang, ' . $user['name'] . '!',
         'role'     => $user['role'],
         'redirect' => $redirectMap[$user['role']] ?? Tenant::schoolLocalUrl($school['slug']),
     ]);

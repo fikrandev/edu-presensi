@@ -139,11 +139,6 @@ $roleTabs = [
             </div>
           </div>
 
-          <div class="rounded-xl bg-[#F8FBFF] border border-blue-100 px-3.5 py-2.5 text-[11px] text-slate-500 space-y-1">
-            <div class="flex items-center gap-1.5"><i class="fa-solid fa-mobile-screen-button text-[#1E5BF0]"></i> <span><strong class="text-slate-700">Pegawai Mobile PWA:</strong> Login aman <strong class="text-[#1E5BF0]">selamanya</strong></span></div>
-            <div class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-amber-600"></i> <span><strong class="text-slate-700">Admin Sekolah &amp; Guru (Web):</strong> Sesi aktif <strong class="text-slate-700">3 jam</strong></span></div>
-          </div>
-
           <button type="submit" class="w-full py-3.5 rounded-xl bg-[#1E5BF0] hover:bg-[#194ED3] text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-2">
             <span>MASUK SEKARANG</span>
             <i class="fa-solid fa-arrow-right text-[11px]"></i>

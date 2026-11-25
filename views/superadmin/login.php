@@ -148,10 +148,7 @@ if (empty($pkgTabs)) {
             </div>
           </div>
 
-          <div class="flex items-center justify-between text-xs">
-            <span class="inline-flex items-center gap-1.5 text-slate-400 font-medium">
-              <i class="fa-regular fa-clock text-[#1E5BF0]"></i> Sesi Web Admin aktif 3 jam
-            </span>
+          <div class="flex justify-end text-xs">
             <button type="button" onclick="$('#saEmail').val('superadmin@edupresensi.id');$('#saPassword').val('Admin123!');" class="text-[#1E5BF0] font-bold hover:underline">
               Isi Demo
             </button>

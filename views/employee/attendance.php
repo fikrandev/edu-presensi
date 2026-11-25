@@ -163,12 +163,14 @@ async function doAttendance(type) {
   if (myLat === null || myLng === null) {
     return AppModal.showError('Lokasi GPS belum terdeteksi. Aktifkan GPS dan tekan tombol GPS di atas.');
   }
-  const ok = await AppModal.confirm({
-    title: type === 'checkin' ? 'Konfirmasi Check-in?' : 'Konfirmasi Check-out?',
-    message: `Kirim absen ${type === 'checkin' ? 'MASUK' : 'PULANG'} sekarang dari jarak ${myDist} meter?`,
-    confirmText: type === 'checkin' ? 'Ya, Check-in' : 'Ya, Check-out'
-  });
-  if (!ok) return;
+  if (type === 'checkout') {
+    const ok = await AppModal.confirm({
+      title: 'Konfirmasi Check-out?',
+      message: `Kirim absen PULANG sekarang dari jarak ${myDist} meter?`,
+      confirmText: 'Ya, Check-out'
+    });
+    if (!ok) return;
+  }
 
   ApiClient.post('<?= app_url('/api/employee/') ?>' + type, {
     school_slug: SLUG,
