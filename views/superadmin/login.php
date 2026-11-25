@@ -130,10 +130,10 @@ if (empty($pkgTabs)) {
 
         <form id="saLoginForm" class="space-y-5">
           <div>
-            <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-2">EMAIL SUPERADMIN</label>
+            <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-2">USERNAME</label>
             <div class="relative">
               <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"><i class="fa-regular fa-user"></i></span>
-              <input type="email" id="saEmail" required value="superadmin@edupresensi.id" placeholder="superadmin@edupresensi.id" class="w-full pl-11 pr-4 py-3.5 rounded-xl bg-[#EDF3FF] border border-transparent focus:border-[#2563EB] focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">
+              <input type="text" id="saUsername" required autocomplete="username" placeholder="superadmin" class="w-full pl-11 pr-4 py-3.5 rounded-xl bg-[#EDF3FF] border border-transparent focus:border-[#2563EB] focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">
             </div>
           </div>
 
@@ -141,17 +141,11 @@ if (empty($pkgTabs)) {
             <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-2">PASSWORD</label>
             <div class="relative">
               <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"><i class="fa-solid fa-lock"></i></span>
-              <input type="password" id="saPassword" required placeholder="••••••••••" class="w-full pl-11 pr-11 py-3.5 rounded-xl bg-[#EDF3FF] border border-transparent focus:border-[#2563EB] focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">
+              <input type="password" id="saPassword" required autocomplete="current-password" placeholder="••••••••••" class="w-full pl-11 pr-11 py-3.5 rounded-xl bg-[#EDF3FF] border border-transparent focus:border-[#2563EB] focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">
               <button type="button" onclick="const i=$('#saPassword');i.attr('type', i.attr('type')==='password'?'text':'password');" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#1E5BF0]">
                 <i class="fa-regular fa-eye"></i>
               </button>
             </div>
-          </div>
-
-          <div class="flex justify-end text-xs">
-            <button type="button" onclick="$('#saEmail').val('superadmin@edupresensi.id');$('#saPassword').val('Admin123!');" class="text-[#1E5BF0] font-bold hover:underline">
-              Isi Demo
-            </button>
           </div>
 
           <button type="submit" class="w-full py-3.5 rounded-xl bg-[#1E5BF0] hover:bg-[#194ED3] text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-2">
@@ -195,9 +189,8 @@ if (empty($pkgTabs)) {
     $('#saLoginForm').on('submit', function (e) {
       e.preventDefault();
       ApiClient.post('<?= app_url('/api/auth/superadmin-login') ?>', {
-        email: $('#saEmail').val().trim(),
-        password: $('#saPassword').val(),
-        remember: $('#saRemember').is(':checked')
+        username: $('#saUsername').val().trim(),
+        password: $('#saPassword').val()
       }, { loadingTitle: 'Memverifikasi Akun...', loadingSub: 'Menghubungkan ke Console Superadmin...' })
       .then(function (res) {
         AppModal.showSaved(res.message, 'Login Berhasil!', function () {

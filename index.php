@@ -103,6 +103,7 @@ if ($seg0 === 'superadmin') {
         'finance'    => ['view' => 'superadmin/finance', 'title' => 'Keuangan & Omset'],
         'wa-gateway' => ['view' => 'superadmin/wa_gateway', 'title' => 'WA Gateway Pengingat'],
         'branding'   => ['view' => 'superadmin/branding', 'title' => 'Logo & Favicon SaaS'],
+        'account'    => ['view' => 'superadmin/account', 'title' => 'Akun & Ubah Password'],
     ];
 
     if (!isset($saViews[$page])) {

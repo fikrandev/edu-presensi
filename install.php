@@ -150,7 +150,7 @@ $detectedUrl  = app_full_url('/');
       </div>
       <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-5 text-xs text-slate-700 space-y-1">
         <div class="font-extrabold text-slate-800 mb-1">Akun Demo Default (Password: <code>Admin123!</code>)</div>
-        <div><strong>Superadmin:</strong> <code>superadmin@edupresensi.id</code></div>
+        <div><strong>Superadmin:</strong> <code>superadmin</code></div>
         <div><strong>Admin Sekolah:</strong> <code>admin@binainsan.sch.id</code></div>
         <div><strong>Guru:</strong> <code>guru@binainsan.sch.id</code></div>
         <div><strong>Pegawai PWA:</strong> <code>pegawai@binainsan.sch.id</code></div>

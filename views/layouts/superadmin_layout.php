@@ -17,6 +17,7 @@ $menuGroups = [
     'PREMIUM & PENGATURAN' => [
         ['key' => 'wa-gateway', 'label' => 'WA Gateway',     'short' => 'WA',       'icon' => 'fa-brands fa-whatsapp','url' => app_url('/superadmin/wa-gateway')],
         ['key' => 'branding',   'label' => 'Logo & Favicon', 'short' => 'Brand',    'icon' => 'fa-sliders',         'url' => app_url('/superadmin/branding')],
+        ['key' => 'account',    'label' => 'Akun & Password','short' => 'Akun',     'icon' => 'fa-user-lock',       'url' => app_url('/superadmin/account')],
     ],
 ];
 
@@ -64,15 +65,15 @@ $todayIdLabel = day_name_id((int)date('N')) . ', ' . format_date_id(date('Y-m-d'
 
       <!-- Clean Sidebar User Footer -->
       <div class="p-4 border-t border-slate-100 flex items-center justify-between gap-2">
-        <div class="flex items-center gap-2.5 min-w-0">
+        <a href="<?= app_url('/superadmin/account') ?>" class="flex items-center gap-2.5 min-w-0 hover:opacity-80 transition" title="Pengaturan Akun & Ubah Password">
           <div class="w-9 h-9 rounded-full bg-[#EEF4FF] text-[#1E5BF0] flex items-center justify-center font-extrabold text-sm shrink-0">
             <?= strtoupper(substr($currentUser['name'] ?? 'S', 0, 1)) ?>
           </div>
           <div class="min-w-0">
             <div class="text-xs font-bold text-slate-800 truncate"><?= Security::e($currentUser['name'] ?? 'Superadmin') ?></div>
-            <div class="text-[11px] font-semibold text-[#1E5BF0] truncate">Superadmin SaaS</div>
+            <div class="text-[11px] font-semibold text-[#1E5BF0] truncate">@<?= Security::e($currentUser['email'] ?? 'superadmin') ?></div>
           </div>
-        </div>
+        </a>
         <a href="<?= app_url('/superadmin/logout') ?>" title="Keluar" class="w-8 h-8 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition shrink-0">
           <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
         </a>
@@ -87,11 +88,12 @@ $todayIdLabel = day_name_id((int)date('N')) . ', ' . format_date_id(date('Y-m-d'
           <img src="<?= Security::e($logoUrl) ?>" alt="Logo" class="h-7 w-auto lg:hidden">
           <h1 class="text-base lg:text-lg font-bold text-slate-800 truncate"><?= Security::e($pageTitle ?? 'Dashboard') ?></h1>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5">
           <span class="hidden md:inline text-xs font-medium text-slate-400"><?= Security::e($todayIdLabel) ?></span>
-          <span class="hidden sm:inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#1E5BF0] text-white text-[11px] font-bold shadow-sm">
-            Superadmin SaaS
-          </span>
+          <a href="<?= app_url('/superadmin/account') ?>" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EEF4FF] hover:bg-blue-100 text-[#1E5BF0] text-[11px] font-bold transition" title="Akun & Ubah Password">
+            <i class="fa-solid fa-key text-[10px]"></i>
+            <span class="hidden sm:inline">Akun &amp; Password</span>
+          </a>
           <a href="<?= app_url('/superadmin/logout') ?>" class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-xl bg-red-50 text-red-600 text-xs">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
           </a>
@@ -107,7 +109,7 @@ $todayIdLabel = day_name_id((int)date('N')) . ', ' . format_date_id(date('Y-m-d'
   <!-- RESPONSIVE MOBILE BOTTOM NAVIGATION (Superadmin) -->
   <nav class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 mobile-bottom-nav">
     <div class="grid grid-cols-6 max-w-lg mx-auto">
-      <?php foreach ($flatMenu as $m):
+      <?php foreach (array_slice($flatMenu, 0, 6) as $m):
         $isAct = $activeMenu === $m['key'];
         $iconClass = str_contains($m['icon'], 'fa-brands') ? $m['icon'] : 'fa-solid ' . $m['icon'];
       ?>

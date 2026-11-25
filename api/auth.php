@@ -6,27 +6,34 @@ $body   = Response::getJsonBody();
 
 if ($action === 'superadmin-login') {
     Security::requireCsrf();
-    $email    = strtolower(trim((string)($body['email'] ?? '')));
+    $username = strtolower(trim((string)($body['username'] ?? $body['email'] ?? '')));
     $password = (string)($body['password'] ?? '');
 
-    if ($email === '' || $password === '') {
-        Response::json(['success' => false, 'message' => 'Email dan password wajib diisi.'], 422);
+    if ($username === '' || $password === '') {
+        Response::json(['success' => false, 'message' => 'Username dan password wajib diisi.'], 422);
     }
-    if (!Security::checkLoginRateLimit('sa:' . $email)) {
+    if (!Security::checkLoginRateLimit('sa:' . $username)) {
         Response::json(['success' => false, 'message' => 'Terlalu banyak percobaan login gagal. Coba lagi 15 menit lagi.'], 429);
     }
 
     $pdo = Database::pdo();
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE role = 'superadmin' AND LOWER(email) = ? AND is_active = 1 LIMIT 1");
-    $stmt->execute([$email]);
+
+    // Auto-migrate default seeded superadmin@edupresensi.id -> superadmin cleanly on existing databases
+    try {
+        $pdo->exec("UPDATE users SET email = 'superadmin' WHERE role = 'superadmin' AND LOWER(email) = 'superadmin@edupresensi.id'");
+    } catch (Throwable) {
+    }
+
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE role = 'superadmin' AND (LOWER(email) = ? OR LOWER(nip_nik) = ?) AND is_active = 1 LIMIT 1");
+    $stmt->execute([$username, $username]);
     $user = $stmt->fetch();
 
     if (!$user || !Security::verifyPassword($password, $user['password_hash'])) {
-        Security::recordFailedLogin('sa:' . $email);
-        Response::json(['success' => false, 'message' => 'Email atau password Superadmin tidak valid.'], 401);
+        Security::recordFailedLogin('sa:' . $username);
+        Response::json(['success' => false, 'message' => 'Username atau password Superadmin tidak valid.'], 401);
     }
 
-    Security::clearLoginAttempts('sa:' . $email);
+    Security::clearLoginAttempts('sa:' . $username);
     // Superadmin Web Admin: strictly 3-hour session (never persistent forever)
     Auth::loginUser($user, false);
 

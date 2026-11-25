@@ -698,4 +698,70 @@ if ($action === 'branding-save') {
     ]);
 }
 
+// =========================================================================
+// AKUN & UBAH PASSWORD SUPERADMIN
+// =========================================================================
+if ($action === 'account-get') {
+    Response::json([
+        'success' => true,
+        'data'    => [
+            'id'            => (int)$superadmin['id'],
+            'name'          => $superadmin['name'],
+            'username'      => $superadmin['email'],
+            'phone'         => $superadmin['phone'],
+            'last_login_at' => $superadmin['last_login_at'],
+        ],
+    ]);
+}
+
+if ($action === 'account-update') {
+    Security::requireCsrf();
+    $name     = trim((string)($body['name'] ?? ''));
+    $username = strtolower(trim((string)($body['username'] ?? '')));
+    $phone    = trim((string)($body['phone'] ?? ''));
+
+    if ($name === '' || $username === '') {
+        Response::json(['success' => false, 'message' => 'Nama dan username Superadmin wajib diisi.'], 422);
+    }
+    if (preg_match('/\s/', $username)) {
+        Response::json(['success' => false, 'message' => 'Username tidak boleh mengandung spasi.'], 422);
+    }
+
+    $dup = $pdo->prepare("SELECT id FROM users WHERE role = 'superadmin' AND LOWER(email) = ? AND id <> ? LIMIT 1");
+    $dup->execute([$username, $superadmin['id']]);
+    if ($dup->fetch()) {
+        Response::json(['success' => false, 'message' => "Username '{$username}' sudah digunakan akun Superadmin lain."], 422);
+    }
+
+    $pdo->prepare("UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ? AND role = 'superadmin'")
+        ->execute([$name, $username, $phone, $superadmin['id']]);
+
+    Response::json(['success' => true, 'mode' => 'updated', 'message' => "Profil & username Superadmin ('{$username}') berhasil diperbarui!"]);
+}
+
+if ($action === 'password-update') {
+    Security::requireCsrf();
+    $oldPass     = (string)($body['old_password'] ?? '');
+    $newPass     = (string)($body['new_password'] ?? '');
+    $confirmPass = (string)($body['confirm_password'] ?? '');
+
+    if ($oldPass === '' || $newPass === '') {
+        Response::json(['success' => false, 'message' => 'Password lama dan password baru wajib diisi.'], 422);
+    }
+    if (strlen($newPass) < 6) {
+        Response::json(['success' => false, 'message' => 'Password baru minimal 6 karakter.'], 422);
+    }
+    if ($confirmPass !== '' && $newPass !== $confirmPass) {
+        Response::json(['success' => false, 'message' => 'Konfirmasi password baru tidak cocok.'], 422);
+    }
+    if (!Security::verifyPassword($oldPass, $superadmin['password_hash'])) {
+        Response::json(['success' => false, 'message' => 'Password lama tidak sesuai.'], 422);
+    }
+
+    $pdo->prepare("UPDATE users SET password_hash = ? WHERE id = ? AND role = 'superadmin'")
+        ->execute([Security::hashPassword($newPass), $superadmin['id']]);
+
+    Response::json(['success' => true, 'mode' => 'updated', 'message' => 'Password Superadmin berhasil diperbarui!']);
+}
+
 Response::json(['success' => false, 'message' => 'Aksi Superadmin tidak dikenali.'], 404);

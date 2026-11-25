@@ -32,14 +32,14 @@ function run_saas_seed(PDO $pdo): array
     }
 
     // 2. Superadmin account
-    $saCheck = $pdo->prepare("SELECT id FROM users WHERE role = 'superadmin' AND email = ? LIMIT 1");
-    $saCheck->execute(['superadmin@edupresensi.id']);
+    $saCheck = $pdo->prepare("SELECT id FROM users WHERE role = 'superadmin' AND LOWER(email) IN ('superadmin', 'superadmin@edupresensi.id') LIMIT 1");
+    $saCheck->execute();
     if (!$saCheck->fetch()) {
         $pdo->prepare("
             INSERT INTO users (school_id, role, nip_nik, name, email, phone, password_hash, position_title, is_active)
-            VALUES (NULL, 'superadmin', 'SA-001', 'Superadmin EduPresensi', 'superadmin@edupresensi.id', '081100000001', ?, 'Owner SaaS', 1)
+            VALUES (NULL, 'superadmin', 'SA-001', 'Superadmin EduPresensi', 'superadmin', '081100000001', ?, 'Owner SaaS', 1)
         ")->execute([Security::hashPassword('Admin123!')]);
-        $log[] = 'Superadmin created: superadmin@edupresensi.id / Admin123!';
+        $log[] = 'Superadmin created: superadmin / Admin123!';
     }
 
     // 3. Packages
